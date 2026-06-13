@@ -6,7 +6,7 @@ colorTo: indigo
 sdk: static
 app_file: index.html
 pinned: false
-short_description: Sovereign domain superiority with a signed receipt per verdict.
+short_description: Sovereign domain superiority; signed receipt per verdict.
 ---
 
 # SZL HOLDINGS — SDA (Sovereign Domain Superiority)
