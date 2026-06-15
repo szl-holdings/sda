@@ -3,8 +3,8 @@ title: SZL SDA
 emoji: 🛰️
 colorFrom: green
 colorTo: indigo
-sdk: static
-app_file: index.html
+sdk: docker
+app_port: 7860
 pinned: false
 short_description: Sovereign domain superiority; signed receipt per verdict.
 ---
