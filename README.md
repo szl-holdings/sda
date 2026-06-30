@@ -101,3 +101,13 @@ Mobile system per the estate mobile spec: ≥12px font floor, ≥44px tap target
 
 Deep-space dark, teal `#01696F` / cyan `#3DD6FF` / violet `#7C5CFF` glow, glassmorphism, system fonts —
 consistent with the cathedral / energy / khipu / llm-router / anatomy / mechanics estate spaces.
+
+---
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19944926.svg)](https://doi.org/10.5281/zenodo.19944926)
+
+## Citation
+
+Part of the **SZL Holdings Ouroboros Thesis** — concept DOI [`10.5281/zenodo.19944926`](https://doi.org/10.5281/zenodo.19944926) (Stephen P. Lutar, Jr., [ORCID 0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173)). Doctrine v11 LOCKED; Λ = Conjecture 1.
+
+*Signed-off-by: Stephen Lutar <stephenlutar2@gmail.com>*
