@@ -296,6 +296,100 @@ section{scroll-margin-top:20px}
   .topbar{flex-wrap:wrap;gap:8px}
 }
 
+/* ============================================================================
+ * ADDITIVE PRESENTATION POLISH — motion, hover, focus, mobile
+ * Presentation only: no copy, no logic, no JS. Respects prefers-reduced-motion
+ * (the global reduce block below collapses every animation/transition to ~0ms,
+ * so all entrance keyframes settle instantly on their final, fully-visible state).
+ * The WebGL background (#sda-canvas) and #vignette are intentionally untouched.
+ * ==========================================================================*/
+
+/* ---- entrance keyframes ---- */
+@keyframes szl-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes szl-pop{from{opacity:0;transform:translateY(14px) scale(.986)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes szl-fade{from{opacity:0}to{opacity:1}}
+@keyframes szl-sheen{0%,100%{background-position:0% center}50%{background-position:100% center}}
+
+/* ---- hero entrance + gentle headline sheen ---- */
+.hero .eyebrow{animation:szl-rise var(--dur-slow) var(--ease-out) both}
+.hero .headline{background-size:220% auto;
+  animation:szl-rise 520ms var(--ease-out) 60ms both, szl-sheen 9s ease-in-out 800ms infinite}
+.hero .hero-sub{animation:szl-rise 520ms var(--ease-out) 140ms both}
+.hero .hero-tagline{animation:szl-rise 520ms var(--ease-out) 210ms both}
+.hero .badge-strip{animation:szl-pop 560ms var(--ease-out) 280ms both}
+
+/* ---- section header entrance ---- */
+.sec .sec-eyebrow{animation:szl-rise 480ms var(--ease-out) both}
+.sec .sec-title{animation:szl-rise 500ms var(--ease-out) 60ms both}
+.sec .sec-lead{animation:szl-rise 500ms var(--ease-out) 120ms both}
+.flow{animation:szl-fade 640ms var(--ease-out) 160ms both}
+
+/* ---- staggered card / panel entrance ---- */
+.grid-3 .card,.grid-2 > *{animation:szl-pop 560ms var(--ease-out) both}
+.grid-3 .card:nth-child(1){animation-delay:60ms}
+.grid-3 .card:nth-child(2){animation-delay:120ms}
+.grid-3 .card:nth-child(3){animation-delay:180ms}
+.grid-3 .card:nth-child(4){animation-delay:240ms}
+.grid-3 .card:nth-child(5){animation-delay:300ms}
+.grid-3 .card:nth-child(6){animation-delay:360ms}
+.grid-2 > *:nth-child(2){animation-delay:120ms}
+.fit-row{animation:szl-pop 520ms var(--ease-out) both}
+.fit-row:nth-child(2){animation-delay:110ms}
+.fit-row:nth-child(3){animation-delay:200ms}
+
+/* ---- richer focus ring (additive, stronger than base) ---- */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;
+  box-shadow:0 0 0 4px rgba(61,214,255,.22)}
+
+/* ---- hover interactions (pointer devices only) ---- */
+@media (hover:hover){
+  .card,.fit-row,.visual-wrap,.node,.flow .chip,.tag,.conn-badge,.logo,
+  .cite a,.foot a,.receipt-row,.metrics tbody tr,.score-row,.live-pill,.roadmap-pill{
+    transition:transform var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-fast) var(--ease-out)}
+
+  .card:hover{transform:translateY(-4px);
+    border-color:rgba(40,224,208,.42);
+    box-shadow:0 16px 52px rgba(0,0,0,.52),0 0 0 1px rgba(40,224,208,.16)}
+  .fit-row:hover{transform:translateY(-3px);
+    border-color:rgba(40,224,208,.36);
+    box-shadow:0 12px 40px rgba(0,0,0,.42)}
+  .visual-wrap:hover{border-color:rgba(40,224,208,.30)}
+  .node:hover{transform:translateX(3px);border-color:rgba(40,224,208,.36);
+    background:var(--glass)}
+  .flow .chip:hover{transform:translateY(-2px);border-color:rgba(40,224,208,.42);
+    box-shadow:0 8px 26px rgba(0,0,0,.4)}
+  .tag:hover{transform:translateY(-1px);filter:brightness(1.12)}
+  .conn-badge:hover{border-color:rgba(40,224,208,.42)}
+  .logo:hover{transform:rotate(-6deg) scale(1.05)}
+  .receipt-row:hover{background:rgba(40,224,208,.05)}
+  .metrics tbody tr:hover td{background:rgba(40,224,208,.05)}
+  .score-row:hover{border-color:rgba(40,224,208,.34)}
+  .live-pill:hover,.roadmap-pill:hover{filter:brightness(1.12)}
+  .cite a:hover,.foot a:hover{border-bottom-color:currentColor}
+}
+
+/* ---- pipeline dot pulse for extra life ---- */
+.flow .chip .cdot{animation:szl-pulse-dot 2.6s var(--ease-out) infinite}
+@keyframes szl-pulse-dot{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ---- mobile refinements (additive) ---- */
+@media (max-width:600px){
+  .hero{padding-top:clamp(14px,4vw,30px)}
+  .badge-strip{padding:13px;gap:7px}
+  .flow .chip{width:100%;justify-content:center}
+  .fit-row{padding:14px}
+  .visual-head{gap:8px}
+}
+@media (max-width:380px){
+  .brand-line1{letter-spacing:.22em}
+  .badge-strip{padding:11px}
+}
+
 /* ---- reduced motion ---- */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms !important;
