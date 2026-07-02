@@ -1,4 +1,5 @@
 ---
+license: apache-2.0
 title: SZL SDA
 emoji: 🛰️
 colorFrom: green
