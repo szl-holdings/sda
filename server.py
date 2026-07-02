@@ -33,7 +33,7 @@ CONTENT_SECURITY_POLICY = (
     "font-src 'self'; "
     "connect-src 'self' https://a-11-oy.com "
     "https://szlholdings-killinchu.hf.space; "
-    "frame-ancestors 'self'"
+    "frame-ancestors 'self' https://huggingface.co https://*.hf.space https://*.huggingface.co"
 )
 
 
