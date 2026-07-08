@@ -12,10 +12,13 @@ short_description: Sovereign domain superiority; signed receipt per verdict.
 
 # SZL HOLDINGS — SDA (Sovereign Domain Superiority)
 
-A self-contained, mobile-friendly surface that explains and demonstrates **SZL SDA**, SZL's
-clean-room sovereign **Domain-Superiority** engine — **`khipu-sda-core`**: multivariate + graph
-anomaly detection and multi-sensor track fusion into a Common Operating Picture, a Λ-gated advisory
-verdict, and a signed provenance receipt for every threat call.
+A self-contained, mobile-friendly surface that explains and demonstrates **SZL SDA** — SZL's
+clean-room sovereign **Domain-Superiority** engine, **`khipu-sda-core`**. It delivers:
+
+- multivariate + graph **anomaly detection**;
+- **multi-sensor track fusion** into a Common Operating Picture;
+- a **Λ-gated advisory verdict**; and
+- a **signed provenance receipt** for every threat call.
 
 SZL SDA is **inspired by** [True Anomaly's Mosaic](https://www.trueanomaly.space/mosaic) capability
 (sensor-fusion COP, OODA acceleration, ML threat-warning). **SZL is not affiliated with True Anomaly**
@@ -112,3 +115,21 @@ consistent with the cathedral / energy / khipu / llm-router / anatomy / mechanic
 Part of the **SZL Holdings Ouroboros Thesis** — concept DOI [`10.5281/zenodo.19944926`](https://doi.org/10.5281/zenodo.19944926) (Stephen P. Lutar, Jr., [ORCID 0009-0001-0110-4173](https://orcid.org/0009-0001-0110-4173)). Doctrine v11 LOCKED; Λ = Conjecture 1.
 
 *Signed-off-by: Stephen Lutar <stephenlutar2@gmail.com>*
+
+---
+
+## ◇ Part of the SZL Holdings estate — *governed AI you can prove*
+
+One sovereign substrate, many organs — every decision carries a signed, checkable receipt.
+
+**[◇ Holographic Estate — the showcase](https://szlholdings-holographic.static.hf.space)** ·
+[🛡️ a11oy](https://huggingface.co/spaces/SZLHOLDINGS/a11oy) ·
+[🧬 IMMUNE](https://huggingface.co/spaces/SZLHOLDINGS/immune) ·
+[🦅 killinchu](https://huggingface.co/spaces/SZLHOLDINGS/killinchu) ·
+[🫀 anatomy](https://huggingface.co/spaces/SZLHOLDINGS/anatomy) ·
+[🌌 cosmos](https://huggingface.co/spaces/SZLHOLDINGS/cosmos) ·
+[🛰️ SDA](https://huggingface.co/spaces/SZLHOLDINGS/sda) ·
+[🌊 yarqa](https://huggingface.co/spaces/SZLHOLDINGS/yarqa) ·
+[🤗 all Spaces](https://huggingface.co/SZLHOLDINGS)
+
+<sub>Doctrine v11 · Λ = Conjecture 1, never green · honest by design · public data only.</sub>
