@@ -8,6 +8,13 @@ sdk: docker
 app_port: 7860
 pinned: false
 short_description: Sovereign domain superiority; signed receipt per verdict.
+tags:
+  - anomaly-detection
+  - sensor-fusion
+  - domain-awareness
+  - receipts
+  - governance
+  - szl-holdings
 ---
 
 # SZL HOLDINGS — SDA (Sovereign Domain Superiority)
@@ -118,22 +125,14 @@ Part of the **SZL Holdings Ouroboros Thesis** — concept DOI [`10.5281/zenodo.1
 
 ---
 
-## ◇ Part of the SZL Holdings estate — *governed AI you can prove*
+## SZL Estate
 
-One sovereign substrate, many organs — every decision carries a signed, checkable receipt.
+Part of the **SZL Holdings** governed-AI estate — *governed AI you can prove*: every decision carries a signed, checkable receipt.
 
-**[◇ Holographic Estate — the showcase](https://szlholdings-holographic.hf.space)** ·
-[🛡️ a11oy](https://huggingface.co/spaces/SZLHOLDINGS/a11oy) ·
-[🧬 IMMUNE](https://huggingface.co/spaces/SZLHOLDINGS/immune) ·
-[🦅 killinchu](https://huggingface.co/spaces/SZLHOLDINGS/killinchu) ·
-[🫀 anatomy](https://huggingface.co/spaces/SZLHOLDINGS/anatomy) ·
-[🌌 cosmos](https://huggingface.co/spaces/SZLHOLDINGS/cosmos) ·
-[🛰️ SDA](https://huggingface.co/spaces/SZLHOLDINGS/sda) ·
-[🌊 yarqa](https://huggingface.co/spaces/SZLHOLDINGS/yarqa) ·
-[🤗 all Spaces](https://huggingface.co/SZLHOLDINGS)
+- **Flagship:** [a11oy command console → a-11-oy.com](https://a-11-oy.com)
+- **Orgs:** [GitHub · szl-holdings](https://github.com/szl-holdings) · [Hugging Face · SZLHOLDINGS](https://huggingface.co/SZLHOLDINGS)
+- **Related Spaces:** [🦅 killinchu](https://huggingface.co/spaces/SZLHOLDINGS/killinchu) · [🫀 anatomy](https://huggingface.co/spaces/SZLHOLDINGS/anatomy) · [🌌 cosmos](https://huggingface.co/spaces/SZLHOLDINGS/cosmos)
 
-**Receipt cluster:** [▶ a11oy console](https://szlholdings-a11oy.hf.space) ·
-[📜 governed-receipt-spec (hub)](https://github.com/szl-holdings/governed-receipt-spec) ·
-[✅ receipt verifier](https://szlholdings-governed-receipt-verifier.static.hf.space)
+**Status:** responding as of 2026-07-09 (HF Space root probe, this session).
 
-<sub>Doctrine v11 · Λ = Conjecture 1, never green · honest by design · public data only.</sub>
+<sub>Doctrine v11 · Λ = Conjecture 1 (advisory — never "green"/theorem; open) · honest by design · public data only.</sub>
