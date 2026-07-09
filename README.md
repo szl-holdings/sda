@@ -122,7 +122,7 @@ Part of the **SZL Holdings Ouroboros Thesis** — concept DOI [`10.5281/zenodo.1
 
 One sovereign substrate, many organs — every decision carries a signed, checkable receipt.
 
-**[◇ Holographic Estate — the showcase](https://szlholdings-holographic.static.hf.space)** ·
+**[◇ Holographic Estate — the showcase](https://szlholdings-holographic.hf.space)** ·
 [🛡️ a11oy](https://huggingface.co/spaces/SZLHOLDINGS/a11oy) ·
 [🧬 IMMUNE](https://huggingface.co/spaces/SZLHOLDINGS/immune) ·
 [🦅 killinchu](https://huggingface.co/spaces/SZLHOLDINGS/killinchu) ·
@@ -131,5 +131,9 @@ One sovereign substrate, many organs — every decision carries a signed, checka
 [🛰️ SDA](https://huggingface.co/spaces/SZLHOLDINGS/sda) ·
 [🌊 yarqa](https://huggingface.co/spaces/SZLHOLDINGS/yarqa) ·
 [🤗 all Spaces](https://huggingface.co/SZLHOLDINGS)
+
+**Receipt cluster:** [▶ a11oy console](https://szlholdings-a11oy.hf.space) ·
+[📜 governed-receipt-spec (hub)](https://github.com/szl-holdings/governed-receipt-spec) ·
+[✅ receipt verifier](https://szlholdings-governed-receipt-verifier.static.hf.space)
 
 <sub>Doctrine v11 · Λ = Conjecture 1, never green · honest by design · public data only.</sub>
