@@ -100,13 +100,22 @@ receipt — never inflated.**
 
 ## Tech / sovereignty
 
-Pure static HTML/CSS/JS. **0 runtime CDN** — `three.js` r160 (MIT) is **vendored** locally under
+Static HTML/CSS/JS behind a small hardened read-only Python file server. **0 runtime CDN** — `three.js` r160 (MIT) is **vendored** locally under
 `assets/three.module.min.js` (see `assets/THREE_LICENSE.txt`). The COP canvas, score panel, verify widget,
-and fabric reader are self-contained. **System fonts only** (Calibri / system-ui stack). No server,
-no build step.
+and fabric reader are self-contained. **System fonts only** (Calibri / system-ui stack). There is no
+application database, write API, or frontend build step.
 
 Mobile system per the estate mobile spec: ≥12px font floor, ≥44px tap targets, `safe-area-inset`,
 0px horizontal overflow at 320/360/390/768, `prefers-reduced-motion`, WCAG AA.
+
+### Deployment-source evidence
+
+`GET /.well-known/szl-source.json` reports the measured Hugging Face repository head and the
+source-resolution boundary. The inferred name-matched repository `szl-holdings/sda` returned GitHub
+`404`, so the document states `PENDING_SOURCE_RESOLUTION` / `UNKNOWN`, leaves `source.commit` null,
+and explicitly does not claim GitHub parity, a reproducible build, or exact serving-process provenance.
+`?refresh=1` bypasses the short repository-head cache. The response is read-only, `no-store`, and
+inherits the same security headers as the rest of the Space.
 
 ## Branding
 

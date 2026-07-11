@@ -18,10 +18,32 @@ read-only cross-origin verify fetches to a-11-oy.com and killinchu, so the
 WebGL scene and the SDA verify widget keep working.
 """
 import functools
+import json
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlsplit
+
+from szl_source_attestation import build_attestation
 
 PORT = 7860
 DIRECTORY = "/app"
+SPACE_ID = "SZLHOLDINGS/sda"
+HF_OVERLAY_BASE_REVISION = "05cd77a1e728f59ab920e04bd632e7ff64a25b2e"
+SOURCE_OBSERVATION = {
+    "repository": "szl-holdings/sda",
+    "commit": None,
+    "path": "",
+    "state": "PENDING_SOURCE_RESOLUTION",
+    "relation": "UNKNOWN",
+    "evidence_url": "https://api.github.com/repos/szl-holdings/sda",
+    "observation": {
+        "observed_at": "2026-07-11T22:00:20Z",
+        "http_status": 404,
+        "meaning": (
+            "The inferred name-matched GitHub repository was not found. "
+            "No source commit or parity claim is available."
+        ),
+    },
+}
 
 CONTENT_SECURITY_POLICY = (
     "default-src 'self'; "
@@ -43,6 +65,33 @@ class HardenedHandler(SimpleHTTPRequestHandler):
 
     def version_string(self):
         return "szl"
+
+    def _send_json(self, payload, status=200):
+        body = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-SZL-Transport-State", "REACHABLE")
+        self.send_header("X-SZL-Evidence-State", payload.get("evidence_state", "UNAVAILABLE"))
+        self.send_header("X-SZL-Authority-State", "READ_ONLY")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        parsed = urlsplit(self.path)
+        if parsed.path == "/.well-known/szl-source.json":
+            force = parse_qs(parsed.query).get("refresh", ["0"])[0] == "1"
+            payload = build_attestation(
+                space_id=SPACE_ID,
+                source=SOURCE_OBSERVATION,
+                alignment_state="UNKNOWN",
+                overlay_base_revision=HF_OVERLAY_BASE_REVISION,
+                force=force,
+            )
+            self._send_json(payload)
+            return
+        super().do_GET()
 
     def end_headers(self):
         self.send_header("Content-Security-Policy", CONTENT_SECURITY_POLICY)
