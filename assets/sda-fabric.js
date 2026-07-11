@@ -1,7 +1,7 @@
 /* ============================================================================
  * SZL SDA — sda-fabric.js
  * Honest, vendored, 0-CDN runtime wiring:
- *   1. Live read of a11oy /v1/compute-pool with captured SNAPSHOT fallback.
+ *   1. Live read of a11oy /api/a11oy/v1/compute-pool with captured SNAPSHOT fallback.
  *   2. Optional live read of killinchu /mosaic feed -> COP score panel (LIVE label).
  *   3. Mount the "ask the fabric — verify a receipt" widget.
  *   4. Poll for an SDA validation figure and swap it in when present.
