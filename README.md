@@ -102,7 +102,7 @@ receipt — never inflated.**
   [Merlion (BSD-3)](https://github.com/salesforce/Merlion), [TODS (Apache-2.0)](https://github.com/datamllab/tods),
   [tsod (MIT)](https://github.com/DHI/tsod), [GDN (MIT)](https://github.com/d-ailin/GDN),
   [GraGOD (MIT)](https://github.com/GraGODs/GraGOD), [python-sgp4 (MIT)](https://github.com/brandon-rhodes/python-sgp4).
-- **alibi-detect EXCLUDED** ([Seldon BSL-1.1](https://www.seldon.io/strengthening-our-commitment-to-open-core/));
+- **alibi-detect EXCLUDED** ([Seldon BSL-1.1](https://github.com/SeldonIO/alibi-detect/blob/master/LICENSE));
   CI-enforced absent in `khipu-sda-core`.
 - Verify-receipt widget UI pattern inspired by smolagents (Apache-2.0) and assistant-ui (MIT); rebuilt
   SZL-native, no code copied.
