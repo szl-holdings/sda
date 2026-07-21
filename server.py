@@ -20,6 +20,7 @@ WebGL scene and the SDA verify widget keep working.
 import functools
 import json
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
 from szl_source_attestation import build_attestation
@@ -28,6 +29,15 @@ PORT = 7860
 DIRECTORY = "/app"
 SPACE_ID = "SZLHOLDINGS/sda"
 HF_OVERLAY_BASE_REVISION = "05cd77a1e728f59ab920e04bd632e7ff64a25b2e"
+REQUIRED_ASSETS = (
+    "index.html",
+    "assets/cop.js",
+    "assets/scene.js",
+    "assets/sda-fabric.js",
+    "assets/style.css",
+    "assets/three.module.min.js",
+)
+SNAPSHOT_FILE = "assets/snapshot-compute-pool.json"
 SOURCE_OBSERVATION = {
     "repository": "szl-holdings/sda",
     "commit": None,
@@ -59,6 +69,79 @@ CONTENT_SECURITY_POLICY = (
 )
 
 
+def local_dependency_state(directory=DIRECTORY):
+    """Validate only Space-local assets; external operational feeds stay unknown."""
+    root = Path(directory)
+    assets = {}
+    ready = True
+    for relative in REQUIRED_ASSETS:
+        path = root / relative
+        present = path.is_file() and path.stat().st_size > 0
+        assets[relative] = "READY" if present else "MISSING_OR_EMPTY"
+        ready = ready and present
+
+    snapshot_path = root / SNAPSHOT_FILE
+    snapshot_state = "READY"
+    try:
+        snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+        if not isinstance(snapshot, (dict, list)):
+            raise ValueError("snapshot must be structured JSON")
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError):
+        snapshot_state = "MISSING_OR_INVALID"
+        ready = False
+    return {
+        "ready": ready,
+        "assets": assets,
+        "compute_pool_snapshot": snapshot_state,
+    }
+
+
+def live_payload():
+    return {
+        "schema": "szl.space-health/v1",
+        "space_id": SPACE_ID,
+        "status": "LIVE",
+        "ready": None,
+        "transport_state": "REACHABLE",
+        "evidence_state": "PROCESS_LIVENESS_ONLY",
+        "verification_state": "STRUCTURAL_ONLY",
+        "authority_state": "READ_ONLY",
+    }
+
+
+def health_payload(directory=DIRECTORY):
+    dependencies = local_dependency_state(directory)
+    return {
+        "schema": "szl.space-health/v1",
+        "space_id": SPACE_ID,
+        "status": (
+            "READY_WITH_UNVERIFIED_EXTERNAL_FEEDS"
+            if dependencies["ready"]
+            else "NOT_READY"
+        ),
+        "ready": dependencies["ready"],
+        "transport_state": "REACHABLE",
+        "evidence_state": (
+            "LOCAL_DEPENDENCIES_VERIFIED"
+            if dependencies["ready"]
+            else "LOCAL_DEPENDENCY_FAILURE"
+        ),
+        "verification_state": "STRUCTURAL_ONLY",
+        "authority_state": "READ_ONLY",
+        "dependencies": dependencies,
+        "external_dependencies": {
+            "a11oy_compute_pool": "NOT_MEASURED",
+            "killinchu_common_operating_picture": "NOT_MEASURED",
+            "source_repository_relation": SOURCE_OBSERVATION["state"],
+        },
+        "health_boundary": (
+            "Readiness covers the local read-only SDA visualization and packaged "
+            "snapshot only; it does not assert live sensors, effectors, orbital "
+            "capability, compute, or external feeds."
+        ),
+    }
+
+
 class HardenedHandler(SimpleHTTPRequestHandler):
     server_version = "szl"
     sys_version = ""
@@ -80,6 +163,13 @@ class HardenedHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlsplit(self.path)
+        if parsed.path == "/live":
+            self._send_json(live_payload())
+            return
+        if parsed.path == "/health":
+            payload = health_payload(self.directory or DIRECTORY)
+            self._send_json(payload, 200 if payload["ready"] else 503)
+            return
         if parsed.path == "/.well-known/szl-source.json":
             force = parse_qs(parsed.query).get("refresh", ["0"])[0] == "1"
             payload = build_attestation(
