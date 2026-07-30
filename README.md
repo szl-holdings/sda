@@ -132,11 +132,18 @@ Mobile system per the estate mobile spec: ≥12px font floor, ≥44px tap target
 ### Deployment-source evidence
 
 `GET /.well-known/szl-source.json` reports the measured Hugging Face repository head and the
-source-resolution boundary. The inferred name-matched repository `szl-holdings/sda` returned GitHub
-`404`, so the document states `PENDING_SOURCE_RESOLUTION` / `UNKNOWN`, leaves `source.commit` null,
-and explicitly does not claim GitHub parity, a reproducible build, or exact serving-process provenance.
-`?refresh=1` bypasses the short repository-head cache. The response is read-only, `no-store`, and
-inherits the same security headers as the rest of the Space.
+exact `szl-holdings/sda` revision injected by the protected deployment workflow. The workflow publishes
+only the declared runtime file set, verifies every shipped file by SHA-256, and refuses readiness until
+`SOURCE_BINDING.json` contains an exact 40-character Git revision. `?refresh=1` bypasses the short
+repository-head cache. The response is read-only, `no-store`, and inherits the same security headers as
+the rest of the Space. This scoped source binding does not claim external-feed availability, operational
+accuracy, reproducible builds, or live effectors.
+
+Runtime evidence routes:
+
+- `GET /livez` and `GET /healthz` — process liveness only.
+- `GET /readyz` — local runtime dependencies plus exact source binding.
+- `GET /api/build-info` — exact GitHub repository, revision, and deployment-alignment state.
 
 ## Branding
 

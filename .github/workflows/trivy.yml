@@ -1,0 +1,20 @@
+name: Trivy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  trivy:
+    permissions:
+      contents: read
+      security-events: write
+    uses: szl-holdings/.github/.github/workflows/reusable-trivy.yml@ebd2128c691b850c84438b671fbb512945933776
+    secrets: inherit
