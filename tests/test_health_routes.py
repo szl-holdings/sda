@@ -28,7 +28,7 @@ class HealthRouteTests(unittest.TestCase):
             payload["external_dependencies"]["killinchu_common_operating_picture"],
         )
         self.assertEqual(
-            "PENDING_SOURCE_RESOLUTION",
+            "UNAVAILABLE",
             payload["external_dependencies"]["source_repository_relation"],
         )
 
@@ -75,6 +75,24 @@ class HealthRouteTests(unittest.TestCase):
                 httpd.shutdown()
                 httpd.server_close()
                 thread.join(timeout=3)
+
+    def test_readyz_requires_exact_source_binding(self):
+        handler = functools.partial(server.HardenedHandler, directory=str(ROOT))
+        httpd = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        thread.start()
+        try:
+            with self.assertRaises(HTTPError) as caught:
+                urlopen(
+                    f"http://127.0.0.1:{httpd.server_port}/readyz", timeout=3
+                )
+            self.assertEqual(503, caught.exception.code)
+            payload = json.loads(caught.exception.read())
+            self.assertFalse(payload["source_ready"])
+        finally:
+            httpd.shutdown()
+            httpd.server_close()
+            thread.join(timeout=3)
 
 
 if __name__ == "__main__":
