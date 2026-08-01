@@ -63,9 +63,10 @@
     list.appendChild(summary);
 
     if(isLive){
-      if(srcBadge){ srcBadge.textContent='LIVE'; srcBadge.classList.add('live'); }
+      var observedAt = new Date().toISOString();
+      if(srcBadge){ srcBadge.textContent='LIVE / MEASURED'; srcBadge.classList.add('live'); srcBadge.title='Observed '+observedAt; }
       if(connBadge){ connBadge.classList.remove('snapshot'); }
-      if(connLabel){ connLabel.textContent='FABRIC: LIVE'; }
+      if(connLabel){ connLabel.textContent='FABRIC: LIVE / MEASURED'; connLabel.title='Observed '+observedAt; }
     } else {
       if(srcBadge){ srcBadge.textContent='SNAPSHOT'; srcBadge.classList.remove('live'); }
       if(connBadge){ connBadge.classList.add('snapshot'); }
@@ -103,17 +104,17 @@
         }).filter(function(t){ return t.id; });
         if (norm.length && window.SDA_COP && window.SDA_COP.setTracks){
           window.SDA_COP.setTracks(norm);
-          markCopLive();
+          markCopLive(new Date().toISOString());
         }
       })
       .catch(function(){ /* keep honest DEMO label; no fabrication */ });
   }
-  function markCopLive(){
+  function markCopLive(observedAt){
     ['cop-src','cop-feed-src'].forEach(function(id){
-      var b=document.getElementById(id); if(b){ b.textContent='LIVE · killinchu /mosaic'; b.classList.add('live'); }
+      var b=document.getElementById(id); if(b){ b.textContent='LIVE / MEASURED · killinchu'; b.classList.add('live'); b.title='Observed '+observedAt; }
     });
     var note=document.getElementById('cop-demo-note');
-    if(note){ note.innerHTML='<strong>Live read.</strong> The COP panel is showing real anomaly scores from the killinchu <code>/api/killinchu/v1/mosaic/cop</code> endpoint. Track motion remains an illustrative rendering; the scores and verdicts are live.'; }
+    if(note){ note.innerHTML='<strong>Live read observed '+esc(observedAt)+'.</strong> The COP panel is showing anomaly scores retrieved from the killinchu <code>/api/killinchu/v1/mosaic/cop</code> endpoint. Track motion remains an illustrative rendering; this observation does not establish operational accuracy.'; }
   }
 
   /* ---- SDA validation figure swap-in (silent HEAD probe; no 404 noise) ---- */
