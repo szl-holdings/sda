@@ -283,8 +283,37 @@ section{scroll-margin-top:20px}
 .foot a{color:var(--cyan);text-decoration:none;border-bottom:1px dotted rgba(61,214,255,.5)}
 .foot a:hover,.foot a:focus-visible{color:var(--teal-bright)}
 
+/* ---- KANCHAY evidence contract + accessibility hardening ---- */
+.skip-link{position:fixed;z-index:100;top:max(10px,var(--safe-t));left:max(10px,var(--safe-l));
+  min-height:44px;padding:12px 16px;background:var(--bg2);border:1px solid var(--cyan);
+  border-radius:8px;color:var(--cyan);font-weight:700;transform:translateY(-180%)}
+.skip-link:focus{transform:translateY(0)}
+button,[role="button"],input:not([type="checkbox"]):not([type="radio"]),select{min-height:44px}
+.topbar{padding-top:max(12px,var(--safe-t));padding-right:max(16px,var(--safe-r));padding-left:max(16px,var(--safe-l))}
+.kanchay-contract{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:22px;
+  margin:0 0 clamp(34px,6vw,58px);padding:clamp(18px,4vw,30px);border:1px solid var(--glass-brd);
+  border-radius:18px;background:linear-gradient(135deg,rgba(1,105,111,.16),rgba(124,92,255,.08));
+  box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+.kanchay-intro .sec-eyebrow{text-align:left}
+.kanchay-intro h2{font-size:var(--fs-h2);line-height:1.18;color:var(--ink)}
+.kanchay-intro>p:last-of-type{margin-top:12px;color:var(--ink-dim);font-size:var(--fs-body);line-height:1.6}
+.kanchay-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.kanchay-actions a{display:inline-flex;min-height:44px;align-items:center;padding:0 14px;border:1px solid rgba(61,214,255,.4);
+  border-radius:8px;color:var(--cyan);font-size:var(--fs-caption);font-weight:700;text-decoration:none}
+.kanchay-actions a:hover{background:rgba(61,214,255,.1)}
+.kanchay-states{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kanchay-states article{padding:14px;border:1px solid var(--glass-brd);border-radius:10px;background:var(--glass-2)}
+.kanchay-states article strong{display:block;margin-bottom:6px;color:var(--warn);font-size:var(--fs-caption);letter-spacing:.08em}
+.kanchay-states article span,.kanchay-quickstart span{color:var(--ink-dim);font-size:var(--fs-caption);line-height:1.5}
+.kanchay-quickstart{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px;
+  border-left:3px solid var(--teal-bright);background:rgba(40,224,208,.06)}
+.kanchay-quickstart b{color:var(--teal-bright);font-size:var(--fs-caption);letter-spacing:.08em;text-transform:uppercase}
+.kanchay-quickstart code{padding:5px 8px;background:rgba(2,12,14,.8);color:var(--cyan);font-size:var(--fs-caption)}
+
 /* ---- responsive ---- */
 @media (max-width:600px){
+  .kanchay-contract{grid-template-columns:1fr}
+  .kanchay-states{grid-template-columns:1fr}
   .flow .arrow{display:none}
   .flow{gap:8px}
   .receipt-row{flex-direction:column;gap:3px}
