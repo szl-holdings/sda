@@ -7,7 +7,7 @@ colorTo: gray
 sdk: docker
 app_port: 7860
 pinned: false
-short_description: Governed domain awareness with receipt-bound advisory verdicts.
+short_description: Receipt-bound domain awareness for governed sensor fusion.
 tags:
   - anomaly-detection
   - sensor-fusion
