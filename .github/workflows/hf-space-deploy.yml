@@ -36,7 +36,7 @@ jobs:
         run: python -m pip install "huggingface_hub==0.36.0"
       - name: Publish exact runtime file set
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_TOKEN: ${{ secrets.HF_ORG_TOKEN || secrets.HF_TOKEN }}
         run: |
           test -n "$HF_TOKEN"
           python scripts/hf_space_deploy.py --token "$HF_TOKEN"
