@@ -15,6 +15,7 @@ from huggingface_hub import HfApi
 
 _SHA = re.compile(r"^[0-9a-f]{40}$")
 _REPOSITORY = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = (
     "Dockerfile",
     "LICENSE",
@@ -43,7 +44,16 @@ def source_binding(repository: str, revision: str) -> dict[str, str]:
     }
 
 
+def require_standalone_publication(source: Path) -> None:
+    """A fold marker denies publication, including through --source-dir."""
+    for root in (REPOSITORY_ROOT, source):
+        marker = root / "FOLD.md"
+        if marker.exists() or marker.is_symlink():
+            sys.exit("Standalone Space publication is disabled for folded repositories.")
+
+
 def build_release(source: Path, destination: Path, binding: dict[str, str]) -> None:
+    require_standalone_publication(source)
     for relative in ROOT_FILES:
         path = source / relative
         if not path.is_file():
@@ -60,6 +70,8 @@ def build_release(source: Path, destination: Path, binding: dict[str, str]) -> N
 
 
 def main() -> None:
+    # Refuse before argument parsing, credential use, staging, or provider calls.
+    require_standalone_publication(REPOSITORY_ROOT)
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-dir", default=".")
     parser.add_argument("--repo-id", default="SZLHOLDINGS/sda")
