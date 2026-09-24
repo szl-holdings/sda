@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify live SDA runtime files and source binding against GitHub."""
+"""Verify a standalone SDA runtime only while this repository is authoritative."""
 from __future__ import annotations
 
 import argparse
@@ -10,14 +10,28 @@ import sys
 import urllib.request
 from pathlib import Path
 
-from hf_space_deploy import ROOT_FILES
+try:
+    from .hf_space_deploy import REPOSITORY_ROOT, ROOT_FILES
+except ImportError:  # pragma: no cover - script entrypoint
+    from hf_space_deploy import REPOSITORY_ROOT, ROOT_FILES
 
 _SHA = re.compile(r"^[0-9a-f]{40}$")
 RESOLVE = "https://huggingface.co/spaces/{repo}/resolve/main/{path}"
+VERIFICATION_DENIAL = (
+    "Standalone Space verification is disabled for folded repositories."
+)
 
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def require_standalone_verification(source: Path) -> None:
+    """A fold marker denies standalone runtime qualification."""
+    for root in (REPOSITORY_ROOT, source):
+        marker = root / "FOLD.md"
+        if marker.exists() or marker.is_symlink():
+            sys.exit(VERIFICATION_DENIAL)
 
 
 def runtime_files(source: Path) -> list[Path]:
@@ -35,6 +49,10 @@ def fetch(repo: str, relative: str) -> bytes:
 
 
 def main() -> None:
+    # A folded repository is historical evidence, not a live publication authority.
+    # Refuse before argument parsing or provider/network access.
+    require_standalone_verification(REPOSITORY_ROOT)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-dir", default=".")
     parser.add_argument("--repo-id", default="SZLHOLDINGS/sda")
@@ -42,6 +60,8 @@ def main() -> None:
     args = parser.parse_args()
 
     source = Path(args.source_dir).resolve()
+    require_standalone_verification(source)
+
     revision = args.source_revision.strip().lower()
     if not _SHA.fullmatch(revision):
         sys.exit("Expected source revision is not an exact Git SHA.")
