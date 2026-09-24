@@ -11,6 +11,9 @@ on:
 permissions:
   contents: read
 
+env:
+  SOURCE_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
@@ -28,6 +31,16 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.SOURCE_REVISION }}
+          persist-credentials: false
+      - name: Prove exact source revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$SOURCE_REVISION"
+          echo "Qualified exact source $actual"
       - uses: github/codeql-action/init@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 # v4.37.3
         with:
           languages: ${{ matrix.language }}
