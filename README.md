@@ -1,13 +1,13 @@
 ---
 license: apache-2.0
-title: SZL SDA
+title: SZL SDA — Folded
 emoji: 🛰️
 colorFrom: blue
 colorTo: gray
 sdk: docker
 app_port: 7860
 pinned: false
-short_description: Receipt-bound domain awareness for governed sensor fusion.
+short_description: Historical SDA surface; canonical engine authority is khipu-sda-core.
 tags:
   - anomaly-detection
   - sensor-fusion
@@ -25,51 +25,50 @@ tags:
 
 # SDA
 
-**See what changed across noisy sensors—then leave a verifiable record of the advisory.**
+**FOLDED / ARCHIVE-BOUND / NOT CANONICAL**
 
-`DEMONSTRATION` · `READ-ONLY` · `AIR / MARITIME / COUNTER-UAS`
+This repository preserves the historical investor-facing SDA surface and its
+source evidence. It is no longer a standalone publication authority.
 
-[Open the live mission map](https://huggingface.co/spaces/SZLHOLDINGS/sda) ·
-[Inspect current readiness](https://szlholdings-sda.hf.space/readyz) ·
-[Read the source binding](https://szlholdings-sda.hf.space/api/build-info)
+**Canonical engine:** [szl-holdings/khipu-sda-core](https://github.com/szl-holdings/khipu-sda-core)
 
 ## Mission brief
 
-SDA turns multivariate signals and graph relationships into a fused operating
-picture and a policy-aware advisory verdict. It is designed for teams that need
-to investigate an anomaly without losing the provenance of inputs, method, and
-decision context.
+The preserved SDA surface demonstrates a read-only operating picture for noisy
+sensor tracks, graph relationships, policy-aware advisory verdicts, and receipt
+context.
 
 **Detect → Fuse → Govern → Verify**
 
-- Detect point and relational anomalies across illustrative tracks.
+- Detect illustrative point and relational anomalies.
 - Fuse observations into a common operating picture.
-- Apply Λ as an advisory signal; a separately named policy gate owns control.
-- Carry DSSE-shaped evidence fields downstream for independent verification.
+- Keep Λ advisory; a separately named policy gate owns control.
+- Carry evidence fields downstream for independent verification.
 
-## What the evidence says now
+## Current authority and evidence
 
-- **OPERATIONAL:** the public, read-only demonstration and its packaged local
-  dependencies. The live [`/readyz`](https://szlholdings-sda.hf.space/readyz)
-  response is the current status source.
-- **SOURCE BOUND:** the deployment workflow publishes a declared runtime file
-  set and exposes its exact Git revision through
-  [`/api/build-info`](https://szlholdings-sda.hf.space/api/build-info).
-- **NOT MEASURED:** live sensor, Killinchu COP, and A11oy compute-pool
-  availability unless the running surface explicitly reports otherwise.
-- **MODELED:** the included tracks and synthetic anomaly baseline. They are not
-  operational accuracy claims.
-- **CONJECTURE / ROADMAP:** Λ remains Conjecture 1 and advisory. Orbital SDA is
-  roadmap; effectors are simulated.
+- **CANONICAL:** `khipu-sda-core` owns current SDA engine authority.
+- **NO STANDALONE PUBLICATION:** `FOLD.md` disables standalone Hugging Face
+  publication from this repository, including alternate source directories.
+- **NO STANDALONE RUNTIME QUALIFICATION:** the standalone drift verifier also
+  fails closed while this repository is folded. An extant historical Space is
+  not current source or readiness authority.
+- **HISTORICAL SNAPSHOT:** `SPACE_PROVENANCE.json` preserves the July 30, 2026
+  observation. Its historical source-of-record and runtime fields must not be
+  promoted as current state.
+- **MODELED:** packaged tracks and anomaly baselines remain demonstration data,
+  not operational-accuracy evidence.
+- **CONJECTURE / ROADMAP:** Λ remains Conjecture 1 and advisory. Effectors are
+  simulated.
 
-Receipt verification establishes integrity and origin within its stated scope.
-It does not establish prediction accuracy, operational readiness, or real-world
+Receipt verification establishes integrity only within its stated scope. It
+does not establish prediction accuracy, operational readiness, or real-world
 effectiveness.
 
 ## Run locally
 
-Requires Python 3.12. The runtime uses the standard library and has no frontend
-build step.
+Historical source can still be inspected locally without publishing it.
+Requires Python 3.12.
 
 ```bash
 git clone https://github.com/szl-holdings/sda.git
@@ -83,9 +82,8 @@ Open `http://127.0.0.1:7860` and check process liveness:
 curl http://127.0.0.1:7860/livez
 ```
 
-Local `/readyz` intentionally fails closed until an exact
-`SOURCE_BINDING.json` is present. That binding is injected and verified by the
-protected Hugging Face deployment workflow.
+Local `/readyz` remains fail-closed without an exact `SOURCE_BINDING.json`.
+That local behavior is not a deployment or promotion claim.
 
 ## Verify the repository
 
@@ -95,26 +93,25 @@ python -m compileall -q server.py szl_source_attestation.py scripts tests
 python -m pytest -q
 ```
 
-The native suite checks health boundaries, no-store response behavior,
-fail-closed readiness, and exact-runtime-file-set source reporting.
+The native suite checks health boundaries, source-attestation behavior, folded
+publication/verification denial, and workflow source binding.
 
 ## System boundaries
 
-- `server.py` serves the hardened read-only surface and evidence routes.
-- `index.html` and vendored assets render the operating picture without a
-  runtime CDN.
-- Optional browser reads may reach the A11oy and Killinchu APIs; unavailable
-  sources stay visibly distinct from packaged snapshots and demo data.
-- The repository has no application database or write API. A user-submitted
-  receipt is sent only when the verifier action is invoked.
+- `server.py` preserves the historical read-only surface and evidence routes.
+- `index.html` and vendored assets render locally without a runtime CDN.
+- Optional browser reads may reach external APIs; unavailable sources stay
+  distinct from packaged snapshots and demo data.
+- The repository has no application database or write API.
 - Source binding does not claim reproducible builds, binary provenance, or
-  serving-process identity beyond the fields returned by the evidence route.
+  serving-process identity.
 
 ## Project routes
 
-- [Deployment and provenance contract](SPACE_PROVENANCE.json)
+- [Fold and canonical-authority record](FOLD.md)
+- [Historical Space provenance snapshot](SPACE_PROVENANCE.json)
+- [Canonical SDA engine](https://github.com/szl-holdings/khipu-sda-core)
 - [Security policy](https://github.com/szl-holdings/.github/security/policy)
-- [Issues and support](https://github.com/szl-holdings/sda/issues)
 - [Commit history](https://github.com/szl-holdings/sda/commits/main)
 - [Apache-2.0 license](LICENSE)
 
