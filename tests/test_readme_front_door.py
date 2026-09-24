@@ -1,9 +1,11 @@
 from pathlib import Path
+import json
 import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
+PROVENANCE = json.loads((ROOT / "SPACE_PROVENANCE.json").read_text(encoding="utf-8"))
 
 
 def test_readme_is_a_compact_investor_first_front_door():
@@ -26,28 +28,44 @@ def test_readme_uses_the_shared_responsive_estate_banner():
     assert not re.search(r'width="\d+px"', README)
 
 
-def test_readme_keeps_evidence_and_operational_state_separate():
+def test_readme_marks_folded_authority_without_live_promotion_claims():
     for label in (
-        "OPERATIONAL",
-        "SOURCE BOUND",
-        "NOT MEASURED",
-        "MODELED",
+        "FOLDED / ARCHIVE-BOUND / NOT CANONICAL",
+        "CANONICAL:",
+        "NO STANDALONE PUBLICATION",
+        "NO STANDALONE RUNTIME QUALIFICATION",
+        "HISTORICAL SNAPSHOT",
+        "MODELED:",
         "CONJECTURE / ROADMAP",
     ):
         assert label in README
 
+    assert "https://github.com/szl-holdings/khipu-sda-core" in README
     assert "Λ remains Conjecture 1 and advisory" in README
-    assert "effectors are simulated" in README
-    assert "Receipt verification establishes integrity and origin" in README
+    assert "Effectors are" in README
     assert "does not establish prediction accuracy" in README
+    assert "**OPERATIONAL:**" not in README
+    assert "**SOURCE BOUND:**" not in README
+    assert "https://szlholdings-sda.hf.space/readyz" not in README
+    assert "https://szlholdings-sda.hf.space/api/build-info" not in README
 
 
-def test_readme_routes_builders_and_verifiers_to_native_evidence():
+def test_historical_space_provenance_has_current_authority_qualifier():
+    assert PROVENANCE["record_state"] == "HISTORICAL_SNAPSHOT_SUPERSEDED"
+    assert PROVENANCE["observed_at"] == "2026-07-30T16:00:00Z"
+    authority = PROVENANCE["current_authority"]
+    assert authority["canonical_repository"] == (
+        "https://github.com/szl-holdings/khipu-sda-core"
+    )
+    assert authority["standalone_publication"] == "DISABLED_BY_FOLD_MARKER"
+    assert authority["standalone_runtime_qualification"] == "NOT_CURRENT_AUTHORITY"
+
+
+def test_readme_preserves_local_inspection_and_native_evidence_routes():
     for route in (
-        "https://szlholdings-sda.hf.space/readyz",
-        "https://szlholdings-sda.hf.space/api/build-info",
         "python server.py",
         "python -m pytest -q",
         "SPACE_PROVENANCE.json",
+        "FOLD.md",
     ):
         assert route in README
