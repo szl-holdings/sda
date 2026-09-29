@@ -79,15 +79,31 @@ def measure_hf_head(space_id: str, force: bool = False) -> dict[str, Any]:
     return measurement
 
 
+def not_deployed_measurement() -> dict[str, Any]:
+    """No target Space is configured, so nothing is measured or probed."""
+    return {
+        "hf_revision": None,
+        "last_modified": None,
+        "observed_at": _now_iso(),
+        "state": "NOT_DEPLOYED",
+        "method": "NONE",
+        "resolver": None,
+    }
+
+
 def build_attestation(
     *,
-    space_id: str,
+    space_id: str | None,
     source: dict[str, Any],
     alignment_state: str,
     overlay_base_revision: str,
     force: bool = False,
 ) -> dict[str, Any]:
-    measurement = measure_hf_head(space_id, force=force)
+    measurement = (
+        measure_hf_head(space_id, force=force)
+        if space_id
+        else not_deployed_measurement()
+    )
     revision = measurement["hf_revision"]
     return {
         "schema": "szl.deployment-source/v1",

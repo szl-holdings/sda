@@ -41,3 +41,12 @@ def test_unfolded_source_passes_only_the_local_verification_gate(tmp_path, monke
 
 def test_repository_fold_marker_is_currently_present():
     assert (ROOT / "FOLD.md").is_file()
+
+
+def test_absent_target_space_fails_closed_before_file_comparison(monkeypatch):
+    def refuse(url, timeout):
+        raise drift.urllib.error.HTTPError(url, 401, "Unauthorized", None, None)
+
+    monkeypatch.setattr(drift.urllib.request, "urlopen", refuse)
+    with pytest.raises(SystemExit, match="Space absent: example-owner/absent"):
+        drift.require_existing_space("example-owner/absent")

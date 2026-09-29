@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -17,6 +18,7 @@ except ImportError:  # pragma: no cover - script entrypoint
 
 _SHA = re.compile(r"^[0-9a-f]{40}$")
 RESOLVE = "https://huggingface.co/spaces/{repo}/resolve/main/{path}"
+SPACE_API = "https://huggingface.co/api/spaces/{repo}"
 VERIFICATION_DENIAL = (
     "Standalone Space verification is disabled for folded repositories."
 )
@@ -32,6 +34,18 @@ def require_standalone_verification(source: Path) -> None:
         marker = root / "FOLD.md"
         if marker.exists() or marker.is_symlink():
             sys.exit(VERIFICATION_DENIAL)
+
+
+def require_existing_space(repo: str) -> None:
+    """A missing (or non-public) target Space is a failure, never a skip."""
+    try:
+        with urllib.request.urlopen(SPACE_API.format(repo=repo), timeout=30):
+            pass
+    except urllib.error.HTTPError as exc:
+        sys.exit(
+            f"Space absent: {repo} (HTTP {exc.code}). A retired or unobservable "
+            "Space cannot qualify a runtime."
+        )
 
 
 def runtime_files(source: Path) -> list[Path]:
@@ -55,7 +69,7 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-dir", default=".")
-    parser.add_argument("--repo-id", default="SZLHOLDINGS/sda")
+    parser.add_argument("--repo-id", required=True)
     parser.add_argument("--source-revision", required=True)
     args = parser.parse_args()
 
@@ -65,6 +79,7 @@ def main() -> None:
     revision = args.source_revision.strip().lower()
     if not _SHA.fullmatch(revision):
         sys.exit("Expected source revision is not an exact Git SHA.")
+    require_existing_space(args.repo_id)
 
     failed = False
     files = runtime_files(source)
