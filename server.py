@@ -28,7 +28,11 @@ from szl_source_attestation import build_attestation
 
 PORT = 7860
 DIRECTORY = "/app"
-SPACE_ID = "SZLHOLDINGS/sda"
+# Folded (FOLD.md): no standalone Space is a current target. The historical id
+# recorded in SPACE_PROVENANCE.json is absent on the Hub (checked 2026-09-29), so
+# it is neither probed nor reported as this process's deployment. Recreating a
+# Space is an owner decision.
+SPACE_ID = None
 HF_OVERLAY_BASE_REVISION = "05cd77a1e728f59ab920e04bd632e7ff64a25b2e"
 SOURCE_BINDING_FILENAME = "SOURCE_BINDING.json"
 _SHA = re.compile(r"^[0-9a-f]{40}$")
@@ -121,11 +125,18 @@ def load_source_binding(directory=DIRECTORY):
 
 def build_source_attestation(directory=DIRECTORY, *, force=False):
     source = load_source_binding(directory)
-    source_bound = source["state"] == "SOURCE_BOUND"
+    deployed = SPACE_ID is not None
+    source_bound = deployed and source["state"] == "SOURCE_BOUND"
+    if not deployed:
+        alignment_state = "NOT_DEPLOYED"
+    elif source_bound:
+        alignment_state = "SOURCE_BOUND_DEPLOYMENT"
+    else:
+        alignment_state = "UNAVAILABLE"
     payload = build_attestation(
         space_id=SPACE_ID,
         source=source,
-        alignment_state="SOURCE_BOUND_DEPLOYMENT" if source_bound else "UNAVAILABLE",
+        alignment_state=alignment_state,
         overlay_base_revision=source["commit"] or HF_OVERLAY_BASE_REVISION,
         force=force,
     )

@@ -52,6 +52,21 @@ def require_standalone_publication(source: Path) -> None:
             sys.exit("Standalone Space publication is disabled for folded repositories.")
 
 
+def require_existing_space(api: HfApi, repo_id: str) -> None:
+    """Publish only into a Space that already exists; never create or revive one.
+
+    The historical SDA Space id is absent on the Hub. Recreating a retired Space
+    is an owner decision, so a missing target fails closed before any upload.
+    """
+    if not _REPOSITORY.fullmatch(repo_id or ""):
+        sys.exit("Target Space must be an owner/name identifier.")
+    if not api.repo_exists(repo_id, repo_type="space"):
+        sys.exit(
+            f"Space absent: {repo_id}. This script never creates or revives a "
+            "Space; recreating it is an owner decision."
+        )
+
+
 def build_release(source: Path, destination: Path, binding: dict[str, str]) -> None:
     require_standalone_publication(source)
     for relative in ROOT_FILES:
@@ -74,7 +89,7 @@ def main() -> None:
     require_standalone_publication(REPOSITORY_ROOT)
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-dir", default=".")
-    parser.add_argument("--repo-id", default="SZLHOLDINGS/sda")
+    parser.add_argument("--repo-id", required=True)
     parser.add_argument("--token", required=True)
     parser.add_argument(
         "--source-repository",
@@ -85,11 +100,13 @@ def main() -> None:
 
     source = Path(args.source_dir).resolve()
     binding = source_binding(args.source_repository, args.source_revision)
+    api = HfApi(token=args.token)
+    require_existing_space(api, args.repo_id)
     with tempfile.TemporaryDirectory(prefix="szl-sda-space-") as temporary:
         release = Path(temporary) / "release"
         release.mkdir()
         build_release(source, release, binding)
-        HfApi(token=args.token).upload_folder(
+        api.upload_folder(
             repo_id=args.repo_id,
             repo_type="space",
             folder_path=str(release),

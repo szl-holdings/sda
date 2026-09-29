@@ -18,6 +18,9 @@ import server  # noqa: E402
 import szl_source_attestation  # noqa: E402
 
 
+# Deliberately not an SZLHOLDINGS id: the exact-binding path is exercised
+# against a fixture target, never against the retired historical Space.
+TEST_SPACE = "example-owner/sda-under-test"
 MEASUREMENT = {
     "hf_revision": "a" * 40,
     "last_modified": "2026-07-11T22:00:00.000Z",
@@ -44,10 +47,31 @@ class SourceAttestationTests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def test_folded_runtime_reports_not_deployed_without_probing_the_hub(self):
+        probe = patch.object(
+            szl_source_attestation,
+            "measure_hf_head",
+            side_effect=AssertionError("no Space may be probed while folded"),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            self._write_binding(directory)
+            with probe:
+                payload = server.build_source_attestation(directory)
+        self.assertIsNone(server.SPACE_ID)
+        self.assertEqual("NOT_DEPLOYED", payload["alignment_state"])
+        self.assertIsNone(payload["deployment"]["hf_space"])
+        self.assertIsNone(payload["deployment"]["hf_revision"])
+        self.assertEqual("UNAVAILABLE", payload["evidence_state"])
+        self.assertEqual("STRUCTURAL_ONLY", payload["verification_state"])
+        self.assertEqual("NOT_CLAIMED", payload["claims"]["github_parity"])
+        evidence = payload["extensions"]["deployment_revision_evidence"]
+        self.assertEqual("NOT_DEPLOYED", evidence["state"])
+        self.assertIsNone(evidence["resolver"])
+
     def test_exact_runtime_binding_is_reported_without_accuracy_overclaim(self):
         with tempfile.TemporaryDirectory() as directory:
             self._write_binding(directory)
-            with patch.object(
+            with patch.object(server, "SPACE_ID", TEST_SPACE), patch.object(
                 szl_source_attestation, "measure_hf_head", return_value=MEASUREMENT
             ):
                 payload = server.build_source_attestation(directory)
@@ -67,7 +91,7 @@ class SourceAttestationTests(unittest.TestCase):
             thread = threading.Thread(target=httpd.serve_forever, daemon=True)
             thread.start()
             try:
-                with patch.object(
+                with patch.object(server, "SPACE_ID", TEST_SPACE), patch.object(
                     szl_source_attestation, "measure_hf_head", return_value=MEASUREMENT
                 ):
                     with urlopen(

@@ -61,3 +61,43 @@ def test_source_binding_remains_a_pure_local_operation():
     binding = deploy.source_binding("szl-holdings/sda", "a" * 40)
     assert binding["source_revision"] == "a" * 40
     assert binding["relation"] == "exact-runtime-file-set"
+
+
+class _Api:
+    def __init__(self, exists):
+        self.exists = exists
+        self.uploads = 0
+
+    def repo_exists(self, repo_id, repo_type=None):
+        assert repo_type == "space"
+        return self.exists
+
+    def upload_folder(self, **_):
+        self.uploads += 1
+
+
+def test_absent_target_space_fails_closed_before_upload():
+    api = _Api(exists=False)
+    with pytest.raises(SystemExit, match="Space absent: example-owner/absent"):
+        deploy.require_existing_space(api, "example-owner/absent")
+    assert api.uploads == 0
+
+
+def test_existing_target_space_passes_the_existence_gate():
+    deploy.require_existing_space(_Api(exists=True), "example-owner/present")
+
+
+def test_malformed_target_is_refused():
+    with pytest.raises(SystemExit, match="owner/name"):
+        deploy.require_existing_space(_Api(exists=True), "not a repo id")
+
+
+def test_no_executable_file_targets_the_retired_space_id():
+    for relative in (
+        "server.py",
+        "szl_source_attestation.py",
+        "scripts/hf_space_deploy.py",
+        "scripts/hf_space_drift_check.py",
+    ):
+        text = (ROOT / relative).read_text(encoding="utf-8")
+        assert "SZLHOLDINGS/sda" not in text, relative

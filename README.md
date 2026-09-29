@@ -53,6 +53,12 @@ context.
 - **NO STANDALONE RUNTIME QUALIFICATION:** the standalone drift verifier also
   fails closed while this repository is folded. An extant historical Space is
   not current source or readiness authority.
+- **SPACE ABSENT:** the historical Space id is absent on the Hub (checked
+  September 29, 2026). Even if unfolded, the publisher and the drift verifier
+  refuse an absent target with `Space absent` and never create or revive a
+  Space; recreating it is an owner decision. The local server neither probes
+  that id nor reports it as a deployment (`/.well-known/szl-source.json`
+  reports `NOT_DEPLOYED`).
 - **HISTORICAL SNAPSHOT:** `SPACE_PROVENANCE.json` preserves the July 30, 2026
   observation. Its historical source-of-record and runtime fields must not be
   promoted as current state.
