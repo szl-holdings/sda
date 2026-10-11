@@ -17,11 +17,8 @@ tags:
   - szl-holdings
 ---
 
-<p align="center">
-  <a href="https://a-11-oy.com/">
-    <img src="https://huggingface.co/spaces/SZLHOLDINGS/README/resolve/main/assets/estate-banner-v2.svg" alt="SZL Holdings — control before action, evidence after" width="100%">
-  </a>
-</p>
+<!-- Native identity: szl-brand@4309f6fce89179331b0b3ed8c99494e76c5be256; Orbit v2 icon sha256 6e2b7d72a3af3d9602b79de41df0194ede6496a9661f057108ec224c0efc92e6. -->
+<p><a href="https://github.com/szl-holdings"><img src="https://raw.githubusercontent.com/szl-holdings/szl-brand/4309f6fce89179331b0b3ed8c99494e76c5be256/kit/logos/orbit-v2/suite/szl-icon-32.svg" alt="SZL Holdings — Orbit v2" width="32" height="32" /></a></p>
 
 # SDA
 
