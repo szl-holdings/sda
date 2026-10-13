@@ -1,4 +1,5 @@
 from pathlib import Path
+from html.parser import HTMLParser
 import json
 import re
 
@@ -19,12 +20,30 @@ def test_readme_is_a_compact_investor_first_front_door():
     assert not re.search(r"^\s*\|.+\|\s*$", body, flags=re.MULTILINE)
 
 
-def test_readme_uses_the_shared_responsive_estate_banner():
-    assert (
-        "https://huggingface.co/spaces/SZLHOLDINGS/README/resolve/main/"
-        "assets/estate-banner-v2.svg"
-    ) in README
-    assert 'width="100%"' in README
+def test_readme_uses_the_pinned_native_orbit_icon():
+    class Images(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.images = []
+
+        def handle_starttag(self, tag, attrs):
+            if tag == "img":
+                self.images.append(dict(attrs))
+
+    parser = Images()
+    parser.feed(README)
+    assert parser.images == [{
+        "src": (
+            "https://raw.githubusercontent.com/szl-holdings/szl-brand/"
+            "4309f6fce89179331b0b3ed8c99494e76c5be256/"
+            "kit/logos/orbit-v2/suite/szl-icon-32.svg"
+        ),
+        "alt": "SZL Holdings — Orbit v2",
+        "width": "32",
+        "height": "32",
+    }]
+    assert "6e2b7d72a3af3d9602b79de41df0194ede6496a9661f057108ec224c0efc92e6" in README
+    assert "assets/estate-banner-v2.svg" not in README
     assert not re.search(r'width="\d+px"', README)
 
 
