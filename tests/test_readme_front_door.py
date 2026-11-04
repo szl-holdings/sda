@@ -10,7 +10,15 @@ PROVENANCE = json.loads((ROOT / "SPACE_PROVENANCE.json").read_text(encoding="utf
 
 
 def test_readme_is_a_compact_investor_first_front_door():
+    # Strip YAML front matter and the estate szl:header block; neither counts
+    # toward the investor-facing compact front-door word budget.
     body = re.sub(r"\A---\s.*?\s---\s*", "", README, flags=re.DOTALL)
+    body = re.sub(
+        r"<!--\s*szl:header\s+v1\s*-->.*?<!--\s*/szl:header\s*-->",
+        "",
+        body,
+        flags=re.DOTALL | re.IGNORECASE,
+    )
     words = re.findall(r"\b[\w’'-]+\b", re.sub(r"<[^>]+>", " ", body))
 
     assert len(words) <= 550
