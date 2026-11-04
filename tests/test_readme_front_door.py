@@ -11,13 +11,22 @@ PROVENANCE = json.loads((ROOT / "SPACE_PROVENANCE.json").read_text(encoding="utf
 
 def test_readme_is_a_compact_investor_first_front_door():
     body = re.sub(r"\A---\s.*?\s---\s*", "", README, flags=re.DOTALL)
-    words = re.findall(r"\b[\w’'-]+\b", re.sub(r"<[^>]+>", " ", body))
+    # House format adopt: szl:header v1 is required estate chrome; compact
+    # investor body is measured outside that block.
+    assert "<!-- szl:header v1 -->" in body and "<!-- /szl:header -->" in body
+    body_core = re.sub(
+        r"<!-- szl:header v1 -->.*?<!-- /szl:header -->",
+        "",
+        body,
+        flags=re.DOTALL,
+    )
+    words = re.findall(r"\b[\w’'-]+\b", re.sub(r"<[^>]+>", " ", body_core))
 
     assert len(words) <= 550
-    assert body.index("# SDA") < body.index("## Mission brief")
-    assert body.index("## Mission brief") < body.index("## Run locally")
-    assert "img.shields.io" not in body
-    assert not re.search(r"^\s*\|.+\|\s*$", body, flags=re.MULTILINE)
+    assert body_core.index("# SDA") < body_core.index("## Mission brief")
+    assert body_core.index("## Mission brief") < body_core.index("## Run locally")
+    assert "img.shields.io" not in body_core
+    assert not re.search(r"^\s*\|.+\|\s*$", body_core, flags=re.MULTILINE)
 
 
 def test_readme_uses_the_pinned_native_orbit_icon():
