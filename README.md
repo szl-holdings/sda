@@ -133,3 +133,5 @@ publication/verification denial, and workflow source binding.
 Clean-room implementation informed by public descriptions and permissively
 licensed research listed in the application. SZL Holdings is not affiliated
 with True Anomaly, and no proprietary implementation is represented here.
+
+Estate on Hugging Face: models, datasets and Spaces are published under the [SZLHOLDINGS](https://huggingface.co/SZLHOLDINGS) org.
